@@ -68,10 +68,13 @@ class Settings(BaseSettings):
     # Supabase Authentication & Project Settings
     SUPABASE_URL: str = ""
     SUPABASE_ANON_KEY: str = ""
+    SUPABASE_JWT_SECRET: str = ""
     JWT_SECRET: str = ""
 
     def __init__(self, **values):
         super().__init__(**values)
+        if not self.JWT_SECRET and self.SUPABASE_JWT_SECRET:
+            self.JWT_SECRET = self.SUPABASE_JWT_SECRET
         if not self.JWT_SECRET or len(self.JWT_SECRET) < 32:
             raise ValueError("JWT_SECRET must be at least 32 characters long")
         if self.APP_ENV.lower() == "production":
